@@ -1,0 +1,21 @@
+server {
+    listen      80;
+    server_name {{MAILING_LIST_DOMAIN}};
+
+    rewrite ^/$ /sympa permanent;
+
+    location /sympa {
+        include       /etc/nginx/fastcgi_params;
+        fastcgi_pass  unix:/run/sympa/wwsympa.socket;
+	fastcgi_split_path_info ^(/sympa)(.*)$;
+	fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
+    location /static-sympa {
+        alias	/usr/share/sympa/static_content;
+    }
+
+    location /css-sympa {
+        alias	/var/lib/sympa/css;
+    }
+}

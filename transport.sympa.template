@@ -1,0 +1,5 @@
+{{MAILING_LIST_DOMAIN}}                error:User unknown in recipient table
+sympa@{{MAILING_LIST_DOMAIN}}          sympa:sympa@{{MAILING_LIST_DOMAIN}}
+listmaster@{{MAILING_LIST_DOMAIN}}     sympa:listmaster@{{MAILING_LIST_DOMAIN}}
+bounce@{{MAILING_LIST_DOMAIN}}         sympabounce:sympa@{{MAILING_LIST_DOMAIN}}
+abuse-feedback-report@{{MAILING_LIST_DOMAIN}}  sympabounce:sympa@{{MAILING_LIST_DOMAIN}}

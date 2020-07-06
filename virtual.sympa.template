@@ -1,0 +1,2 @@
+sympa-request@{{MAILING_LIST_DOMAIN}}  postmaster@localhost
+sympa-owner@{{MAILING_LIST_DOMAIN}}    postmaster@localhost

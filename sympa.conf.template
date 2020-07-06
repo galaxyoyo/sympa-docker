@@ -1,0 +1,895 @@
+###\\\\ Service description ////###
+
+## domain
+## Primary mail domain name
+## Example: domain	mail.example.org
+domain	{{MAILING_LIST_DOMAIN}}
+
+## listmaster
+## Email addresses of listmasters
+## Email addresses of the listmasters (users authorized to perform global
+## server commands). Some error reports may also be sent to these addresses.
+## Listmasters can be defined for each virtual host, however, the default
+## listmasters will have privileges to manage all virtual hosts.
+## Example: listmaster	your_email_address@domain.tld
+listmaster	{{LISTMASTERS}}
+
+## lang
+## Default language
+## This is the default language used by Sympa. One of supported languages
+## should be chosen.
+lang	fr
+
+## supported_lang
+## Supported languages
+## All supported languages for the user interface. Languages proper locale
+## information not installed are ignored.
+#supported_lang	ca,cs,de,el,en-US,es,et,eu,fi,fr,gl,hu,it,ja,ko,nb,nl,oc,pl,pt-BR,ru,sv,tr,vi,zh-CN,zh-TW
+
+## title
+## Title of service
+## The name of your mailing list service. It will appear in the header of web
+## interface and subjects of several service messages.
+title	Système de listes de diffusion
+
+## gecos
+## Display name of Sympa
+## This parameter is used for display name in the "From:" header field for the
+## messages sent by Sympa itself.
+#gecos	SYMPA
+
+## legacy_character_support_feature
+## Support of legacy character set
+## If set to "on", enables support of legacy character set according to
+## charset.conf(5) configuration file.
+## In some language environments, legacy encoding (character set) can be
+## preferred for e-mail messages: for example iso-2022-jp in Japanese
+## language.
+#legacy_character_support_feature	off
+
+###\\\\ Database related ////###
+
+## db_type
+## Type of the database
+## Possible types are "MySQL", "PostgreSQL", "Oracle" and "SQLite".
+db_type	{{DB_TYPE}}
+
+## db_host
+## Hostname of the database server
+## With PostgreSQL, you can also use the path to Unix Socket Directory, e.g.
+## "/var/run/postgresql" for connection with Unix domain socket.
+## Example: db_host	localhost
+db_host	{{DB_HOST}}
+
+## db_port
+## Port of the database server
+db_port	{{DB_PORT}}
+
+## db_name
+## Name of the database
+## With SQLite, this must be the full path to database file.
+## With Oracle Database, this must be SID, net service name or easy connection
+## identifier (to use net service name, db_host should be set to "none" and
+## HOST, PORT and SERVICE_NAME should be defined in tnsnames.ora file).
+db_name	{{DB_NAME}}
+
+## db_user
+## User for the database connection
+## Example: db_user	sympa
+db_user	{{DB_USER}}
+
+## db_passwd
+## Password for the database connection
+## What ever you use a password or not, you must protect the SQL server (is it
+## not a public internet service ?)
+## Example: db_passwd	your_passwd
+db_passwd	{{DB_PASSWORD}}
+
+## db_env
+## Environment variables setting for database
+## With Oracle Database, this is useful for defining ORACLE_HOME and NLS_LANG.
+## Example: db_env	NLS_LANG=American_America.AL32UTF8;ORACLE_HOME=/u01/app/oracle/product/11.2.0/server
+#db_env	
+
+## db_additional_subscriber_fields
+## Database private extension to subscriber table
+## Adds more fields to "subscriber_table" table. Sympa recognizes fields
+## defined with this parameter. You will then be able to use them from within
+## templates and scenarios:
+## * for scenarios: [subscriber->field]
+## * for templates: [% subscriber.field %]
+## These fields will also appear in the list members review page and will be
+## editable by the list owner. This parameter is a comma-separated list.
+## You need to extend the database format with these fields
+## Example: db_additional_subscriber_fields	billing_delay,subscription_expiration
+#db_additional_subscriber_fields	
+
+## db_additional_user_fields
+## Database private extension to user table
+## Adds more fields to "user_table" table. Sympa recognizes fields defined
+## with this parameter. You will then be able to use them from within
+## templates: [% subscriber.field %]
+## This parameter is a comma-separated list.
+## You need to extend the database format with these fields
+## Example: db_additional_user_fields	age,address
+#db_additional_user_fields	
+
+###\\\\ System log ////###
+
+## syslog
+## System log facility for Sympa
+## Do not forget to configure syslog server.
+#syslog	LOCAL1
+
+## log_socket_type
+## Communication mode with syslog server
+#log_socket_type	unix
+
+## log_level
+## Log verbosity
+## Sets the verbosity of logs.
+## 0: Only main operations are logged
+## 3: Almost everything is logged.
+## Example: log_level	2
+log_level	3
+
+###\\\\ Receiving ////###
+
+## default_max_list_members
+## Default maximum number of list members
+## Default limit for the number of subscribers per list (0 means no limit).
+#default_max_list_members	0
+
+## max_size
+## Maximum size of messages
+## Incoming messages smaller than this size is allowed distribution by Sympa.
+## Example: max_size	2097152
+#max_size	5242880
+
+## reject_mail_from_automates_feature
+## Reject mail sent from automated services to list
+## Rejects messages that seem to be from automated services, based on a few
+## header fields ("Content-Identifier:", "Auto-Submitted:").
+## Sympa also can be configured to reject messages based on the "From:" header
+## field value (see "loop_prevention_regex").
+## Example: reject_mail_from_automates_feature	off
+#reject_mail_from_automates_feature	on
+
+## sympa_priority
+## Priority for command messages
+## Priority applied to messages sent to Sympa command address.
+#sympa_priority	1
+
+## request_priority
+## Priority for messages bound for list owners
+## Priority for processing of messages bound for "LIST-request" address, i.e.
+## owners of the list
+#request_priority	0
+
+## owner_priority
+## Priority for non-VERP bounces
+## Priority for processing of messages bound for "LIST-owner" address, i.e.
+## non-delivery reports (bounces).
+#owner_priority	9
+
+## default_list_priority
+## Default priority for list messages
+## Priority for processing of messages posted to list addresses.
+#default_list_priority	5
+
+###\\\\ Sending related ////###
+
+## remove_headers
+## Header fields to be removed from incoming messages
+## Use it, for example, to ensure some privacy for your users in case that
+## "anonymous_sender" mode is inappropriate.
+## The removal of these header fields is applied before Sympa adds its own
+## header fields ("rfc2369_header_fields" and "custom_header").
+## Example: remove_headers	Resent-Date,Resent-From,Resent-To,Resent-Message-Id,Sender,Delivered-To
+#remove_headers	X-Sympa-To,X-Family-To,Return-Receipt-To,Precedence,X-Sequence,Disposition-Notification-To,Sender
+
+## rfc2369_header_fields
+## RFC 2369 header fields
+## Specify which RFC 2369 mailing list header fields to be added.
+## "List-Id:" header field defined in RFC 2919 is always added. Sympa also
+## adds "Archived-At:" header field defined in RFC 5064.
+#rfc2369_header_fields	help,subscribe,unsubscribe,post,owner,archive
+
+## sympa_packet_priority
+## Default priority for a packet
+## The default priority set to a packet to be sent by the bulk.
+#sympa_packet_priority	5
+
+## bulk_fork_threshold
+## Fork threshold of bulk daemon
+## The minimum number of packets before bulk daemon forks a new worker to
+## increase sending rate.
+#bulk_fork_threshold	1
+
+## bulk_max_count
+## Maximum number of bulk workers
+#bulk_max_count	3
+
+## bulk_lazytime
+## Idle timeout of bulk workers
+## The number of seconds a bulk worker will remain running without processing
+## a message before it spontaneously exits.
+#bulk_lazytime	600
+
+## bulk_sleep
+## Sleep time of bulk workers
+## The number of seconds a bulk worker sleeps between starting a new loop if
+## it didn't find a message to send.
+## Keep it small if you want your server to be reactive.
+#bulk_sleep	1
+
+## bulk_wait_to_fork
+## Interval between checks of packet numbers
+## Number of seconds a master bulk daemon waits between two packets number
+## checks.
+## Keep it small if you expect brutal increases in the message sending load.
+#bulk_wait_to_fork	10
+
+## sendmail
+## Path to sendmail
+## Absolute path to sendmail command line utility (e.g.: a binary named
+## "sendmail" is distributed with Postfix).
+## Sympa expects this binary to be sendmail compatible (exim, Postfix, qmail
+## and so on provide it).
+#sendmail	/usr/sbin/sendmail
+sendmail_aliases	/etc/sympa/sympa_transport
+aliases_program		postmap
+aliases_db_type		hash
+
+## log_smtp
+## Log invocation of sendmail
+## This can be overwritten by "-m" option for sympa.pl.
+log_smtp	on
+
+## maxsmtp
+## Maximum number of sendmail processes
+## Maximum number of simultaneous child processes spawned by Sympa. This is
+## the main load control parameter.
+## Proposed value is quite low, but you can rise it up to 100, 200 or even 300
+## with powerful systems.
+## Example: maxsmtp	500
+#maxsmtp	40
+
+## nrcpt
+## Maximum number of recipients per call to sendmail
+## This grouping factor makes it possible for the sendmail processes to
+## optimize the number of SMTP sessions for message distribution. If needed,
+## you can limit the number of recipients for a particular domain. Check the
+## "nrcpt_by_domain.conf" configuration file.
+#nrcpt	25
+
+## avg
+## Maximum number of different mail domains per call to sendmail
+#avg	10
+
+###\\\\ Privileges ////###
+
+## create_list
+## Who is able to create lists
+## Defines who can create lists (or request list creation) by creating new
+## lists or by renaming or copying existing lists.
+## Example: create_list	intranet
+#create_list	public_listmaster
+
+## use_blacklist
+## Use blacklist
+## List of operations separated by comma for which blacklist filter is
+## applied.  Setting this parameter to "none" will hide the blacklist feature.
+#use_blacklist	send,create_list
+
+## owner_domain
+## List of required domains for list owner addresses
+## Restrict list ownership to addresses in the specified domains. This can be
+## used to reserve list ownership to a group of trusted users from a set of
+## domains associated with an organization, while allowing moderators and
+## subscribers from the Internet at large.
+## Example: owner_domain	domain1.tld domain2.tld
+#owner_domain	
+
+## owner_domain_min
+## Minimum number of owners for each list that must match owner_domain
+## restriction
+## Minimum number of owners for each list must satisfy the owner_domain
+## restriction. The default of zero (0) means *all* list owners must match.
+## Setting to 1 requires only one list owner to match owner_domain; all other
+## owners can be from any domain. This setting can be used to ensure that
+## there is always at least one known contact point for any mailing list.
+## Example: owner_domain_min	1
+#owner_domain_min	0
+
+###\\\\ Archives ////###
+
+## process_archive
+## Store distributed messages into archive
+## If enabled, distributed messages via lists will be archived. Otherwise
+## archiving is disabled.
+## Note that even if setting this parameter disabled, past archives will not
+## be removed and will be accessible according to access settings by each
+## list.
+process_archive	on
+
+## custom_archiver
+## Custom archiver
+## Activates a custom archiver to use instead of MHonArc. The value of this
+## parameter is the absolute path to the executable file.
+## Sympa invokes this file with these two arguments:
+## --list
+## The address of the list including domain part.
+## --file
+## Absolute path to the message to be archived.
+#custom_archiver	
+
+## mhonarc
+## Path to MHonArc mail-to-HTML converter
+## This is required for HTML mail archiving.
+#mhonarc	/usr/bin/mhonarc
+
+###\\\\ Bounce management and tracking ////###
+
+## bounce_warn_rate
+## Default bounce warn rate
+## The list owner receives a warning whenever a message is distributed and the
+## number (percentage) of bounces exceeds this value.
+#bounce_warn_rate	30
+
+## bounce_halt_rate
+## Default bounce halt rate
+## NOT USED YET. If bounce rate reaches the halt_rate, messages for the list
+## will be halted, i.e. they are retained for subsequent moderation.
+#bounce_halt_rate	50
+
+## welcome_return_path
+## Remove bouncing new subscribers
+## If set to unique, the welcome message is sent using a unique return path in
+## order to remove the subscriber immediately in the case of a bounce.
+#welcome_return_path	owner
+
+## remind_return_path
+## Remove subscribers bouncing remind message
+## Same as welcome_return_path, but applied to remind messages.
+#remind_return_path	owner
+
+## expire_bounce_task
+## Task for expiration of old bounces
+## This task resets bouncing information for addresses not bouncing in the
+## last 10 days after the latest message distribution.
+#expire_bounce_task	daily
+
+###\\\\ Automatic lists ////###
+
+## automatic_list_families
+## Definition of automatic list families
+## Defines the families the automatic lists are based on. It is a character
+## string structured as follows:
+## * each family is separated from the other by a semicolon (;)
+## * inside a family definition, each field is separated from the other by a
+## colon (:)
+## * each field has the structure: "<field name>=<field value>"
+## Basically, each time Sympa uses the automatic lists families, the values
+## defined in this parameter will be available in the family object.
+## * for scenarios: [family->name]
+## * for templates: [% family.name %]
+## Example: automatic_list_families	name=family_one:prefix=f1:display=My automatic lists:prefix_separator=+:classes separator=-:family_owners_list=alist@domain.tld;name=family_two:prefix=f2:display=My other automatic lists:prefix_separator=+:classes separator=-:family_owners_list=anotherlist@domain.tld;
+#automatic_list_families	
+
+## parsed_family_files
+## Parsed files for families
+## comma-separated list of files that will be parsed by Sympa when
+## instantiating a family (no space allowed in file names)
+#parsed_family_files	message.footer,message.header,message.footer.mime,message.header.mime,info
+
+###\\\\ Tag based spam filtering ////###
+
+## antispam_tag_header_name
+## Header field to tag spams
+## If a spam filter (like spamassassin or j-chkmail) add a header field to tag
+## spams, name of this header field (example X-Spam-Status)
+#antispam_tag_header_name	X-Spam-Status
+
+## antispam_tag_header_spam_regexp
+## Regular expression to check header field to tag spams
+## Regular expression applied on this header to verify message is a spam
+## (example Yes)
+#antispam_tag_header_spam_regexp	^\s*Yes
+
+## antispam_tag_header_ham_regexp
+## Regular expression to determine spam or ham.
+## Regular expression applied on this header field to verify message is NOT a
+## spam (example No)
+#antispam_tag_header_ham_regexp	^\s*No
+
+## spam_status
+## Name of header field to inform
+## Messages are supposed to be filtered by an spam filter that adds them one
+## or more headers. This parameter is used to select a special scenario in
+## order to decide the message's spam status: ham, spam or unsure. This
+## parameter replaces antispam_tag_header_name,
+## antispam_tag_header_spam_regexp and antispam_tag_header_ham_regexp.
+#spam_status	x-spam-status
+
+###\\\\ Directories ////###
+
+## home
+## List home
+## Base directory of list configurations.
+#home	/var/lib/sympa/list_data
+
+## etc
+## Directory for configuration files
+## Base directory of global configuration (except "sympa.conf").
+#etc	/etc/sympa
+
+## spool
+## Base directory of spools
+## Base directory of all spools which are created at runtime. This directory
+## must be writable by Sympa user.
+#spool	/var/spool/sympa
+
+## queue
+## Directory for message incoming spool
+## This spool is used both by "queue" program and "sympa_msg.pl" daemon.
+#queue	/var/spool/sympa/msg
+
+## queuemod
+## Directory for moderation spool
+#queuemod	/var/spool/sympa/moderation
+
+## queuedigest
+## Directory for digest spool
+#queuedigest	/var/spool/sympa/digest
+
+## queueauth
+## Directory for held message spool
+## This parameter is named such by historical reason.
+#queueauth	/var/spool/sympa/auth
+
+## queueoutgoing
+## Directory for archive spool
+## This parameter is named such by historical reason.
+#queueoutgoing	/var/spool/sympa/outgoing
+
+## queuesubscribe
+## Directory for held request spool
+## This parameter is named such by historical reason.
+#queuesubscribe	/var/spool/sympa/subscribe
+
+## queuetopic
+## Directory for topic spool
+#queuetopic	/var/spool/sympa/topic
+
+## queuebounce
+## Directory for bounce incoming spool
+## This spool is used both by "bouncequeue" program and "bounced.pl" daemon.
+#queuebounce	/var/spool/sympa/bounce
+
+## queuetask
+## Directory for task spool
+#queuetask	/var/spool/sympa/task
+
+## queueautomatic
+## Directory for automatic list creation spool
+## This spool is used both by "familyqueue" program and "sympa_automatic.pl"
+## daemon.
+#queueautomatic	/var/spool/sympa/automatic
+
+## queuebulk
+## Directory for message outgoing spool
+## This parameter is named such by historical reason.
+#queuebulk	/var/spool/sympa/bulk
+
+## viewmail_dir
+## Directory to cache formatted messages
+## Base directory path of directories where HTML view of messages are cached.
+#viewmail_dir	/var/spool/sympa/viewmail
+
+## bounce_path
+## Directory for storing bounces
+## The directory where bounced.pl daemon will store the last bouncing message
+## for each user. A message is stored in the file: <bounce_path>/<list
+## name>@<mail domain name>/<email address>, or, if tracking is enabled:
+## <bounce_path>/<list name>@<mail domain name>/<email address>_<envelope ID>.
+## Users can access to these messages using web interface in the bounce
+## management page.
+## Don't confuse with "queuebounce" parameter which defines the spool where
+## incoming error reports are stored and picked by bounced.pl daemon.
+#bounce_path	/var/lib/sympa/bounce
+
+## arc_path
+## Directory for storing archives
+## Where to store HTML archives. This parameter is used by the "archived.pl"
+## daemon. It is a good idea to install the archive outside the web document
+## hierarchy to prevent overcoming of WWSympa's access control.
+#arc_path	/var/lib/sympa/arc
+
+###\\\\ Miscellaneous ////###
+
+## email
+## Local part of Sympa email address
+## Local part (the part preceding the "@" sign) of the address by which mail
+## interface of Sympa accepts mail commands.
+## If you change the default value, you must modify the mail aliases too.
+#email	sympa
+
+## custom_robot_parameter
+## Custom robot parameter
+## Used to define a custom parameter for your server. Do not forget the
+## semicolon between the parameter name and the parameter value.
+## You will be able to access the custom parameter value in web templates by
+## variable "conf.custom_robot_parameter.<param_name>"
+## Example: custom_robot_parameter	param_name ; param_value
+#custom_robot_parameter	
+
+## cache_list_config
+## Use of binary cache of list configuration
+## binary_file: Sympa processes will maintain a binary version of the list
+## configuration, "config.bin" file on local disk. If you manage a big amount
+## of lists (1000+), it should make the web interface startup faster.
+## You can recreate cache by running "sympa.pl --reload_list_config".
+#cache_list_config	none
+
+## logs_expiration_period
+## Max age of logs in database
+## Number of months that elapse before a log is expired
+#logs_expiration_period	3
+
+## umask
+## Umask
+## Default mask for file creation (see umask(2)). Note that it will be
+## interpreted as an octal value.
+#umask	027
+
+## cookie
+## Secret string for generating unique keys
+## This allows generated authentication keys to differ from a site to another.
+## It is also used for encryption of user passwords stored in the database.
+## The presence of this string is one reason why access to "sympa.conf" needs
+## to be restricted to the "sympa" user.
+## Note that changing this parameter will break all HTTP cookies stored in
+## users' browsers, as well as all user passwords and lists X509 private keys.
+## To prevent a catastrophe, Sympa refuses to start if this "cookie" parameter
+## was changed.
+## Example: cookie	123456789
+cookie	`/usr/bin/head -n1 /etc/sympa/cookie`
+
+###\\\\ Web interface parameters ////###
+
+## wwsympa_url
+## URL prefix of web interface
+## This is used to construct URLs of web interface.
+## Example: wwsympa_url	https://web.example.org/sympa
+wwsympa_url	http://{{MAIN_LIST_DOMAIN}}/wws
+
+## http_host
+## URL prefix of WWSympa behind proxy
+#http_host	
+
+## static_content_url
+## URL for static contents
+## HTTP server have to map it with "static_content_path" directory.
+#static_content_url	/static-sympa
+
+## static_content_path
+## Directory for static contents
+static_content_path	/usr/share/sympa/static_content
+
+## log_facility
+## System log facility for web interface
+## System log facility for WWSympa, archived.pl and bounced.pl. Default is to
+## use value of "syslog" parameter.
+#log_facility	LOCAL1
+
+###\\\\ Web interface parameters: Appearances ////###
+
+## default_home
+## Type of main web page
+## "lists" for the page of list of lists. "home" for home page.
+#default_home	home
+
+## archive_default_index
+## Default index organization of web archive
+## thrd: Threaded index.
+## mail: Chronological index.
+#archive_default_index	thrd
+
+## review_page_size
+## Size of review page
+## Default number of lines of the array displaying users in the review page
+#review_page_size	25
+
+## viewlogs_page_size
+## Size of viewlogs page
+## Default number of lines of the array displaying the log entries in the logs
+## page.
+#viewlogs_page_size	25
+
+###\\\\ Web interface parameters: Miscellaneous ////###
+
+## cookie_domain
+## HTTP cookies validity domain
+## If beginning with a dot ("."), the cookie is available within the specified
+## Internet domain. Otherwise, for the specified host. The only reason for
+## replacing the default value would be where WWSympa's authentication process
+## is shared with an application running on another host.
+## Example: cookie_domain	.renater.fr
+#cookie_domain	localhost
+
+## cookie_expire
+## HTTP cookies lifetime
+## This is the default value when not set explicitly by users. "0" means the
+## cookie may be retained during browser sessions.
+#cookie_expire	0
+
+## cookie_refresh
+## Average interval to refresh HTTP session ID.
+#cookie_refresh	60
+
+## default_shared_quota
+## Default disk quota for shared repository
+#default_shared_quota	
+
+## use_html_editor
+## Use HTML editor
+## If set to "on", users will be able to post messages in HTML using a
+## javascript WYSIWYG editor.
+## Example: use_html_editor	on
+#use_html_editor	0
+
+## html_editor_url
+## URL of HTML editor
+## URL path to the javascript file making the WYSIWYG HTML editor available.
+## Relative path under <static_content_url> or absolute path.
+## Example is for TinyMCE 4 installed under <static_content_path>/js/tinymce/.
+## Example: html_editor_url	js/tinymce/tinymce.min.js
+#html_editor_url	
+
+## html_editor_init
+## HTML editor initialization
+## Javascript excerpt that enables and configures the WYSIWYG HTML editor.
+## Example: html_editor_init	tinymce.init({selector:"#body",language:lang.split(/[^a-zA-Z]+/).join("_")});
+#html_editor_init	
+
+## max_wrong_password
+## Count limit of wrong password submission
+## If this limit is reached, the account is locked until the user renews their
+## password. The default value is chosen in order to block bots trying to log
+## in using brute force strategy. This value should never be reached by real
+## users that will probably uses the renew password service before they
+## performs so many tries.
+#max_wrong_password	19
+
+## password_case
+## Password case
+## "insensitive" or "sensitive".
+## If set to "insensitive", WWSympa's password check will be insensitive. This
+## only concerns passwords stored in the Sympa database, not the ones in LDAP.
+## Should not be changed! May invalid all user password.
+#password_case	insensitive
+
+## password_hash
+## Password hashing algorithm
+## "md5" or "bcrypt".
+## If set to "md5", Sympa will use MD5 password hashes. If set to "bcrypt",
+## bcrypt hashes will be used instead. This only concerns passwords stored in
+## the Sympa database, not the ones in LDAP.
+## Should not be changed! May invalid all user passwords.
+password_hash	bcrypt
+
+## password_hash_update
+## Update password hashing algorithm when users log in
+## On successful login, update the encrypted user password to use the
+## algorithm specified by "password_hash". This allows for a graceful
+## transition to a new password hash algorithm. A value of 0 disables updating
+## of existing password hashes.  New and reset passwords will use the
+## "password_hash" setting in all cases.
+#password_hash_update	1
+
+## bcrypt_cost
+## Bcrypt hash cost
+## When "password_hash" is set to "bcrypt", this sets the "cost" parameter of
+## the bcrypt hash function. The default of 12 is expected to require
+## approximately 250ms to calculate the password hash on a 3.2GHz CPU. This
+## only concerns passwords stored in the Sympa database, not the ones in LDAP.
+## Can be changed but any new cost setting will only apply to new passwords.
+#bcrypt_cost	12
+
+## reporting_spam_script_path
+## Script to report spam
+## If set, when a list moderator report undetected spams for list moderation,
+## this external script is invoked and the message is injected into standard
+## input of the script.
+#reporting_spam_script_path	
+
+###\\\\ S/MIME and TLS ////###
+
+## cafile
+## File containing trusted CA certificates
+## This can be used alternatively and/or additionally to "capath".
+#cafile	
+
+## capath
+## Directory containing trusted CA certificates
+## CA certificates in this directory are used for client authentication.
+## The certificates need to have names including hash of subject, or symbolic
+## links to them with such names. The links may be created by using "c_rehash"
+## script bundled in OpenSSL.
+#capath	
+
+## key_passwd
+## Password used to crypt lists private keys
+## If not defined, Sympa assumes that list private keys are not encrypted.
+## Example: key_passwd	your_password
+#key_passwd	
+
+## ssl_cert_dir
+## Directory containing user certificates
+#ssl_cert_dir	/var/lib/sympa/list_data/X509-user-certs
+
+###\\\\ Data sources setup ////###
+
+## default_sql_fetch_timeout
+## Default of SQL fetch timeout
+## Default timeout while performing a fetch with include_sql_query.
+#default_sql_fetch_timeout	300
+
+## default_ttl
+## Default of inclusion timeout
+## Default timeout between two scheduled synchronizations of list members with
+## data sources.
+#default_ttl	3600
+
+###\\\\ DKIM and ARC ////###
+
+## dkim_feature
+## Enable DKIM
+## If set to "on", Sympa may verify DKIM signatures of incoming messages and/
+## or insert DKIM signature to outgoing messages.
+#dkim_feature	off
+
+## dkim_add_signature_to
+## Which service messages to be signed
+## Inserts a DKIM signature to service messages in context of robot, list or
+## both
+#dkim_add_signature_to	robot,list
+
+## dkim_private_key_path
+## File path for DKIM private key
+## The file must contain a PEM encoded private key
+#dkim_private_key_path	
+
+## dkim_signature_apply_on
+## Which messages delivered via lists to be signed
+## Type of message that is added a DKIM signature before distribution to
+## subscribers. Possible values are "none", "any" or a list of the following
+## keywords: "md5_authenticated_messages", "smime_authenticated_messages",
+## "dkim_authenticated_messages", "editor_validated_messages".
+#dkim_signature_apply_on	md5_authenticated_messages,smime_authenticated_messages,dkim_authenticated_messages,editor_validated_messages
+
+## dkim_signer_domain
+## The "d=" tag as defined in rfc 4871
+## The DKIM "d=" tag is the domain of the signing entity. The virtual host
+## domain name is used as its default value
+#dkim_signer_domain	
+
+## dkim_signer_identity
+## The "i=" tag as defined in rfc 4871
+## Default is null.
+#dkim_signer_identity	
+
+## dkim_selector
+## Selector for DNS lookup of DKIM public key
+## The selector is used in order to build the DNS query for public key. It is
+## up to you to choose the value you want but verify that you can query the
+## public DKIM key for "<selector>._domainkey.your_domain"
+#dkim_selector	
+
+## arc_feature
+## Enable ARC
+## If set to "on", Sympa may add ARC seals to outgoing messages.
+#arc_feature	off
+
+## arc_srvid
+## SRV ID for Authentication-Results used in ARC seal
+## Typically the domain of the mail server
+#arc_srvid	
+
+## arc_signer_domain
+## The "d=" tag as defined in ARC
+## The ARC "d=" tag is the domain of the signing entity. The DKIM d= domain
+## name is used as its default value
+#arc_signer_domain	
+
+## arc_selector
+## Selector for DNS lookup of ARC public key
+## The selector is used in order to build the DNS query for public key. It is
+## up to you to choose the value you want but verify that you can query the
+## public DKIM key for "<selector>._domainkey.your_domain". Default is the
+## same selector as for DKIM signatures
+#arc_selector	
+
+## arc_private_key_path
+## File path for ARC private key
+## The file must contain a PEM encoded private key. Defaults to same file as
+## DKIM private key
+#arc_private_key_path	
+
+###\\\\ Antivirus plug-in ////###
+
+## antivirus_path
+## Path to the antivirus scanner engine
+## Supported antivirus: Clam AntiVirus/clamscan & clamdscan, McAfee/uvscan,
+## Fsecure/fsav, Sophos, AVP and Trend Micro/VirusWall
+## Example: antivirus_path	/usr/local/bin/clamscan
+#antivirus_path	
+
+## antivirus_args
+## Antivirus plugin command line arguments
+## Example: antivirus_args	--no-summary --database /usr/local/share/clamav
+#antivirus_args	
+
+###\\\\ Password validation ////###
+
+## password_validation
+## Password validation
+## The password validation techniques to be used against user passwords that
+## are added to mailing lists. Options come from Data::Password
+## (http://search.cpan.org/~razinf/Data-Password-1.07/Password.pm#VARIABLES)
+## Example: password_validation	MINLEN=8,GROUPS=3,DICTIONARY=4,DICTIONARIES=/pentest/dictionaries
+#password_validation	
+
+###\\\\ Authentication with LDAP ////###
+
+## ldap_force_canonical_email
+## Use canonical email address for LDAP authentication
+## When using LDAP authentication, if the identifier provided by the user was
+## a valid email, if this parameter is set to false, then the provided email
+## will be used to authenticate the user. Otherwise, use of the first email
+## returned by the LDAP server will be used.
+#ldap_force_canonical_email	1
+
+###\\\\ Obsoleted parameters ////###
+
+## log_condition
+#log_condition	
+
+## log_module
+#log_module	
+
+## automatic_list_prefix
+## Defines the prefix allowing to recognize that a list is an automatic list.
+#automatic_list_prefix	
+
+## default_distribution_ttl
+## Default timeout between two action-triggered synchronizations of list
+## members with data sources.
+#default_distribution_ttl	300
+
+## voot_feature
+#voot_feature	off
+
+## edit_list
+#edit_list	owner
+
+## use_fast_cgi
+## Enable FastCGI
+## Is FastCGI module for HTTP server installed? This module provides a much
+## faster web interface.
+use_fast_cgi	1
+
+## htmlarea_url
+#htmlarea_url	
+
+## show_report_abuse
+## Add a "Report abuse" link in the side menu of the lists (0|1)
+## The link is a mailto link, you can change that by overriding web_tt2/
+## report_abuse.tt2
+#show_report_abuse	0
+
+css_path	/var/lib/sympa/css
+css_url	/css-sympa
+pictures_path	/var/lib/sympa/pictures
+pictures_url	/pictures-sympa
