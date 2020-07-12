@@ -34,7 +34,7 @@ COPY rsyslog.d /etc/rsyslog.d
 
 COPY sympa.conf.template /etc/sympa/sympa/sympa.conf.template
 
-COPY main.cf /etc/postfix/main.cf
+COPY main.cf.template /etc/postfix/main.cf.template
 COPY master.cf /etc/postfix/master.cf
 
 COPY entrypoint.sh /root/entrypoint.sh

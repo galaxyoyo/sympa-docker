@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cat /etc/sympa/sympa/sympa.conf.template | sed "s/{{MAIN_LIST_DOMAIN}}/$MAIN_LIST_DOMAIN/g" | sed "s/{{LISTMASTERS}}/$LISTMASTERS/g" | sed "s/{{DB_TYPE}}/$DB_TYPE/g" | sed "s/{{DB_NAME}}/$DB_NAME/g" | sed "s/{{DB_HOST}}/$DB_HOST/g" | sed "s/{{DB_PORT}}/$DB_PORT/g" | sed "s/{{DB_USER}}/$DB_USER/g" | sed "s/{{DB_PASSWORD}}/$DB_PASSWORD/g" > /etc/sympa/sympa/sympa.conf
+rm /etc/postfix/main.cf && cat /etc/postfix/main.cf.template | sed "s/{{MAIN_LIST_DOMAIN}}/$MAIN_LIST_DOMAIN/g" > /etc/postfix/main.cf
+
+[[ -d /var/lib/sympa/bounce ]] || mkdir -p /var/lib/sympa/bounce
 
 chown -R sympa:sympa /etc/sympa/sympa_transport \
 	/var/spool/sympa \
