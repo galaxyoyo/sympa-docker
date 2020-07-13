@@ -3,7 +3,7 @@
 ## domain
 ## Primary mail domain name
 ## Example: domain	mail.example.org
-domain	{{MAILING_LIST_DOMAIN}}
+domain	{{MAIN_LIST_DOMAIN}}
 
 ## listmaster
 ## Email addresses of listmasters
