@@ -69,6 +69,12 @@ RUN touch /etc/sympa/transport.sympa \
 RUN postmap hash:/etc/sympa/transport.sympa && \
 	postmap hash:/etc/sympa/virtual.sympa
 
+COPY whitelist-1.1/custom_actions /etc/sympa
+COPY whitelist-1.1/scenari /etc/sympa
+COPY whitelist-1.1/web_tt2 /etc/sympa
+RUN touch /etc/sympa/search_filters/whitelist.txt /etc/sympa/search_filters/modlist.txt
+RUN chown -R sympa:sympa /etc/sympa
+
 EXPOSE 25 80 465
 
 VOLUME /var/lib/sympa \
