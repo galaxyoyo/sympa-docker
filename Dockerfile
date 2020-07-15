@@ -56,15 +56,16 @@ COPY virtual.sympa.template /etc/sympa/virtual.sympa.template
 COPY robot.conf.template /etc/sympa/robot.conf.template
 COPY nginx.conf.template /etc/nginx/site.conf.template
 
+RUN mkdir /etc/sympa/transport && \
+	touch /etc/sympa/transport/sympa_transport && \
+	ln -s /etc/sympa/transport/sympa_transport /etc/sympa/sympa_transport
+
 COPY wwsympa /etc/init.d/wwsympa
 RUN chmod +x /etc/init.d/wwsympa
 
 RUN touch /etc/sympa/transport.sympa \
-	/etc/sympa/virtual.sympa \
-	/etc/sympa/sympa_transport && \
-	chmod 0640 /etc/sympa/sympa_transport && \
-	chown sympa:sympa /etc/sympa/sympa_transport \
-		/etc/sympa/*.sympa
+	/etc/sympa/virtual.sympa && \
+	chown sympa:sympa /etc/sympa/*.sympa
 
 RUN postmap hash:/etc/sympa/transport.sympa && \
 	postmap hash:/etc/sympa/virtual.sympa
@@ -79,6 +80,7 @@ EXPOSE 25 80 465
 
 VOLUME /var/lib/sympa \
 	/var/spool/sympa \
-	/etc/sympa/robots
+	/etc/sympa/robots \
+	/etc/sympa/transport
 
 ENV DOMAINS="localhost"

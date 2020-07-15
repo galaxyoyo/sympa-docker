@@ -4,10 +4,8 @@ cat /etc/sympa/sympa/sympa.conf.template | sed "s/{{MAIN_LIST_DOMAIN}}/$MAIN_LIS
 rm /etc/postfix/main.cf && cat /etc/postfix/main.cf.template | sed "s/{{MAIN_LIST_DOMAIN}}/$MAIN_LIST_DOMAIN/g" > /etc/postfix/main.cf
 
 [[ -d /var/lib/sympa/bounce ]] || mkdir -p /var/lib/sympa/bounce
-
-chown -R sympa:sympa /etc/sympa/sympa_transport \
-	/var/spool/sympa \
-	/var/lib/sympa
+[[ -d /etc/sympa/transport ]] || mkdir -p /etc/sympa/transport
+touch /etc/sympa/transport/sympa_transport
 
 LIST_DOMAINS=$(echo $DOMAINS | tr ";" "\n")
 [[ ! -f /etc/sympa/transport.sympa ]] || rm /etc/sympa/transport.sympa
@@ -31,6 +29,10 @@ do
 	ln -s /etc/nginx/sites-available/$domain /etc/nginx/sites-enabled/$domain
 	echo "Domain $domain added!"
 done
+
+chown -R sympa:sympa /etc/sympa/transport \
+	/var/spool/sympa \
+	/var/lib/sympa
 
 chown -R www-data:www-data /etc/nginx/sites-available /etc/nginx/sites-enabled
 
