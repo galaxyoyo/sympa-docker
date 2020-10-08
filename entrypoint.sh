@@ -21,6 +21,9 @@ do
 	[[ -f /etc/sympa/robots/$domain.conf ]] || cat /etc/sympa/robot.conf.template | sed "s/{{MAILING_LIST_DOMAIN}}/$domain/g" > /etc/sympa/robots/$domain.conf
 	[[ -f /etc/sympa/$domain/robot.conf ]] || ln -s /etc/sympa/robots/$domain.conf /etc/sympa/$domain/robot.conf
 	chown -R sympa:sympa /etc/sympa/$domain /etc/sympa/robots
+	[[ -f /etc/sympa/trusted_applications/$domain.conf ]] || cat /etc/sympa/trusted_applications.conf.template | sed "s/{{MAILING_LIST_DOMAIN}}/$domain/g" > /etc/sympa/trusted_applications/$domain.conf
+	[[ -f /etc/sympa/$domain/trusted_applications.conf ]] || ln -s /etc/sympa/trusted_applications/$domain.conf /etc/sympa/$domain/trusted_applications.conf
+	chown -R sympa:sympa /etc/sympa/$domain /etc/sympa/robots
 	[[ -d /var/lib/sympa/list_data/$domain ]] || mkdir -m 0750 -p /var/lib/sympa/list_data/$domain
 	chown -R sympa:sympa /var/lib/sympa/list_data/$domain
 	cat /etc/sympa/transport.sympa.template | sed "s/{{MAILING_LIST_DOMAIN}}/$domain/g" >> /etc/sympa/transport.sympa
@@ -47,5 +50,6 @@ service postfix reload
 /usr/lib/sympa/bin/sympa_newaliases.pl
 service sympa restart
 service wwsympa restart
+service sympasoap restart
 
 nginx -g "daemon off;"

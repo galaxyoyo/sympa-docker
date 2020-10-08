@@ -1,1 +1,2 @@
 wwsympa_url	https://{{MAILING_LIST_DOMAIN}}/sympa
+soap_url	https://{{MAILING_LIST_DOMAIN}}/sympasoap

@@ -1,0 +1,4 @@
+## trusted_application
+## name example
+## md5password f80904e6cc6e2a51480c74ad44d37ec9	# sympasoap
+## proxy_for_variables user_email,remote_host

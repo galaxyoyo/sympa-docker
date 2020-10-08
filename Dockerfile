@@ -2,6 +2,7 @@ FROM debian:buster
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUNLEVEL=1
+ENV PERL_MM_USE_DEFAULT=1
 
 RUN echo exit 0 > /usr/sbin/policy-rc.d && \
 	chmod +x /usr/sbin/policy-rc.d
@@ -30,6 +31,8 @@ RUN apt update && \
 	sympa && \
 	rm -rf /var/lib/apt/lists/*
 
+RUN cpan install SOAP::Lite
+
 COPY rsyslog.d /etc/rsyslog.d
 
 COPY sympa.conf.template /etc/sympa/sympa/sympa.conf.template
@@ -54,6 +57,7 @@ COPY list_aliases.tt2 /etc/sympa/list_aliases.tt2
 COPY transport.sympa.template /etc/sympa/transport.sympa.template
 COPY virtual.sympa.template /etc/sympa/virtual.sympa.template
 COPY robot.conf.template /etc/sympa/robot.conf.template
+COPY trusted_applications.conf.template /etc/sympa/trusted_applications.conf.template
 COPY nginx.conf.template /etc/nginx/site.conf.template
 
 RUN mkdir /etc/sympa/transport && \
@@ -62,6 +66,9 @@ RUN mkdir /etc/sympa/transport && \
 
 COPY wwsympa /etc/init.d/wwsympa
 RUN chmod +x /etc/init.d/wwsympa
+
+COPY sympasoap /etc/init.d/sympasoap
+RUN chmod +x /etc/init.d/sympasoap
 
 RUN touch /etc/sympa/transport.sympa \
 	/etc/sympa/virtual.sympa && \
@@ -81,6 +88,7 @@ EXPOSE 25 80 465
 VOLUME /var/lib/sympa \
 	/var/spool/sympa \
 	/etc/sympa/robots \
-	/etc/sympa/transport
+	/etc/sympa/transport \
+	/etc/sympa/trusted_applications
 
 ENV DOMAINS="localhost"

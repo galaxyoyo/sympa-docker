@@ -11,6 +11,13 @@ server {
 	fastcgi_param PATH_INFO $fastcgi_path_info;
     }
 
+    location /sympasoap {
+        include       /etc/nginx/fastcgi_params;
+        fastcgi_pass  unix:/run/sympa/sympasoap.socket;
+	fastcgi_split_path_info ^(/sympasoap)(.*)$;
+	fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
     location /static-sympa {
         alias	/usr/share/sympa/static_content;
     }
